@@ -1,0 +1,11 @@
+define syntax for tabs and parts
+fix tabReader summary func - not giving single list
+change func names to be python style
+finished classes in tabReader
+add cols to writer
+change tabReader funcs to be less messy
+  combine a few and comment
+  put all subsections into class ?
+    could have a get_subsect func in class
+maybe split into main, curses and rabReader
+

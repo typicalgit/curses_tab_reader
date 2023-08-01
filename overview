@@ -1,0 +1,7 @@
+
+mode toggle 
+- full mode - shows space
+- summarry mode - show nr spaces only
+
+if in summary mode:
+next 1,2,3 or 5 notes displayed
