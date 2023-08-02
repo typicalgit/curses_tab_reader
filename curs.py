@@ -92,7 +92,8 @@ def main(stdscr):
   tab_path = sys.argv[1]
   Tab = tr.Tab(tab_path)
   sections = Tab.sections
-  section_strings = tr.get_section_strings(sections[0])
+  tmp = list(sections.values())
+  section_strings = tr.get_section_strings(list(sections.values())[0])
   lines,summary = tr.get_lines(section_strings)
   line_dict = dict(lines[0])
   summary_dict = dict(summary[0])

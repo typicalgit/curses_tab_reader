@@ -6,11 +6,16 @@ logging.basicConfig(filename='log')
 
 logger = logging.getLogger(__name__)
 
-
 class Tab():
-  def __init__(self,tab_path):
-    self.tab = open_tab_file(tab_path)
-    self.sections, self.section_names = get_sections(self.tab)
+  def __init__(self,tab_file_name,tab_name=None):
+    self.tab_file_name = tab_file_name
+    self.tab_name = tab_name
+    self.tab_text = open_tab_file(tab_file_name)
+    if self.tab_name == None:
+       self.tab_name = tab_file_name
+    else:
+      self.tab_name = tab_name
+    self.sections = get_sections(self.tab_text,self.tab_name)
 
 
 def open_tab_file(file_path):
@@ -19,38 +24,29 @@ def open_tab_file(file_path):
   file.close()
   return tab
 
-def get_sections(tab):
-  section_positions = []
-  section_names = re.findall(r"\[[A-z|0-9|\s]{1,80}\]",tab)
-  sections = []
-  if section_names == None:
-    print("no sections, treating as one big section")
-    return tab
-  section_positions = get_section_positions(tab,section_names)
-  for pos_item in section_positions:
-    start_pos = pos_item[0]
-    end_pos = pos_item[1]
-    section = tab[start_pos:end_pos]
-    sections.append(section)
-  return sections, section_names
+def get_sections(tab,tab_name):
+  sections = {}
 
-def get_section_positions(tab,sections):
-  section_head_positions = []
-  section_positions = []
+  # RETURN None if tab not populated
+  if tab is None or tab == "":
+    return None
 
-  for section in sections:
-    section_head_positions.append(tab.index(section))
-  section_head_positions.append(len(tab))
+  # CHECK headings are in text
+  pattern = re.compile(r"\[.+?\]")
+  if not re.search(pattern,tab):
+    sections[tab_name] = text
+    return sections
 
-  for i in range(len(section_head_positions) - 1):
-    section_start = section_head_positions[i]
-    section_end = section_head_positions[i + 1] - 1
-    section_name = section_head_positions[i]
-    item = [section_start,section_end]
-    section_positions.append(item)
-  for i in range(len(sections)):
-    section_positions[i].append(sections[i])
-  return section_positions
+  # SPLIT text and find headings
+  texts = re.split(pattern,tab) 
+  # DEL item 0 as comes before 1st heading
+  texts = texts[1:]
+
+  headings = re.findall(pattern, tab)
+
+  for heading, text in zip(headings, texts):
+    sections[heading] = text
+  return sections
 
 def get_section_strings(section):
   out = []

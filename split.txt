@@ -1,0 +1,25 @@
+def split_text_into_sections(text):
+  sections = {}
+  current_section = ''
+  lines = text.splitlines()
+
+  for line in lines:
+    match = re.match(r'\[(.*?)\]', line)
+    if match:
+      # Found a new section heading
+      if current_section:
+        sections[current_section] = '\n'.join(current_lines)
+      current_section = match.group(1)
+      current_lines = []
+    else:
+      # Add line to current section
+      current_lines.append(line)
+
+  # Add the last section
+  if current_section and current_lines:
+    sections[current_section] = '\n'.join(current_lines)
+
+  if not sections:
+    sections['whole_text'] = text
+
+  return sections

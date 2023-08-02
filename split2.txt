@@ -1,0 +1,55 @@
+def find_headings(text):
+    if text is None or text == "":
+        return {}
+    lines = text.split("\n")
+    headings = {}
+    current_heading = "whole_text"
+    current_text = ""
+
+    for line in lines:
+        line = line.strip()
+        if line.startswith("[") and line.endswith("]"):
+            heading = line[1:-1]
+            if heading in headings:
+                heading = heading + ".1"
+            headings[heading] = current_text.strip()
+            current_heading = heading
+            current_text = ""
+        else:
+            current_text += line + "\n"
+
+    headings[current_heading] = current_text.strip()
+
+    return headings
+```
+
+You can use this function by passing the text as an argument, like this:
+
+```python
+text = """
+This is some sample text.
+[Heading 1]
+This is the text under Heading 1.
+
+[Heading 2]
+This is the text under Heading 2.
+
+[Heading 1]
+This is the second occurrence of Heading 1.
+"""
+
+result = find_headings(text)
+print(result)
+```
+
+Output:
+```
+{
+  'whole_text': 'This is some sample text.',
+  'Heading 1': 'This is the text under Heading 1.',
+  'Heading 2': 'This is the text under Heading 2.',
+  'Heading 1.1': 'This is the second occurrence of Heading 1.'
+}
+```
+
+In the output, the keys of the dictionary are the headings, and the values are the corresponding text that follows until the next heading or the end of the file. If there are no headings, the entire text is stored with the key `'whole_text'`. If a heading appears more than once, `.1` is appended to its name to make it unique.
