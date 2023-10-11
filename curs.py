@@ -2,7 +2,7 @@
 import curses
 import time
 import sys
-import tabReader as tr
+import tab as tr
 import proj_utils as putil
 
 mode = 'w' #w=Whole, s=Summary
